@@ -23,9 +23,6 @@ class SalidaProducto extends Model
     const CLIENTE_FRECUENTE_NO = false;
 
     protected $fillable = [
-        'producto_id',
-        'cantidad',
-        'tipo_pago',
         'cliente_frecuente',
         'sin_iva',
         'valor_venta',
@@ -33,6 +30,7 @@ class SalidaProducto extends Model
         'no_factura',
         'usuario_id',
         'sucursal_id',
+        'tipo_pago_id'
     ];
 
     public function tipoPago()

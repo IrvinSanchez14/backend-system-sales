@@ -1,29 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Producto;
+namespace App\Http\Controllers\Compras;
 
+use App\Compras;
 use App\Http\Controllers\ApiController;
-use App\Producto;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class ProductoController extends ApiController
+class ComprasController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api')
-            ->only(['index']);
-    }
-
     public function index()
     {
-        $productos = Producto::orderBy('updated_at', 'desc')->get();
+        $compras = Compras::all();
 
-        return $this->showAll($productos);
+        return $this->showAll($compras);
+    }
+
+    public function onlyToday()
+    {
+        $compras = Compras::whereDate('created_at', Carbon::now()->format('Y-m-d'))
+            ->get();
+
+        return $this->showAll($compras);
     }
 
     /**
@@ -45,17 +48,17 @@ class ProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'categoria_id' => 'required',
+            'lote' => 'required',
+            'tipo_compra' => 'required',
+            'sucursal_id' => 'required',
             'usuario_id' => 'required',
         ];
 
         $this->validate($request, $rules);
 
-        $newProducto = Producto::create($request->all());
+        $newCompra = Compras::create($request->all());
 
-        return $this->showOne($newProducto, 201);
+        return $this->showOne($newCompra, 201);
     }
 
     /**
@@ -64,9 +67,9 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(Compras $compra)
     {
-        return $this->showOne($producto);
+        return $this->showOne($compra);
     }
 
     /**
@@ -87,21 +90,22 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, Compras $compra)
     {
-        $producto->fill($request->only([
-            'nombre',
-            'descripcion',
-            'categoria_id',
+        $compra->fill($request->only([
+            'lote',
+            'tipo_compra',
+            'sucursal_id',
+            'usuario_id',
         ]));
 
-        if ($producto->isClean()) {
+        if ($compra->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $producto->save();
+        $compra->save();
 
-        return $this->showOne($producto);
+        return $this->showOne($compra);
     }
 
     /**
@@ -110,10 +114,10 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(Compras $compra)
     {
-        $producto->delete();
+        $compra->delete();
 
-        return $this->showOne($producto);
+        return $this->showOne($compra);
     }
 }

@@ -1,29 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Producto;
+namespace App\Http\Controllers\CompraDetalle;
 
+use App\CompraDetalle;
 use App\Http\Controllers\ApiController;
-use App\Producto;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class ProductoController extends ApiController
+class CompraDetalleController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api')
-            ->only(['index']);
-    }
-
     public function index()
     {
-        $productos = Producto::orderBy('updated_at', 'desc')->get();
+        $compra_detalles = CompraDetalle::all();
 
-        return $this->showAll($productos);
+        return $this->showAll($compra_detalles);
+    }
+
+    public function onlyToday()
+    {
+        $compras = CompraDetalle::whereDate('created_at', Carbon::now()->format('Y-m-d'))
+            ->get();
+
+        return $this->showAll($compras);
     }
 
     /**
@@ -45,17 +48,19 @@ class ProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'categoria_id' => 'required',
-            'usuario_id' => 'required',
+            'codigo' => 'required',
+            'cantidad' => 'required',
+            'precio_compra' => 'required',
+            'precio_sugerido' => 'required',
+            'producto_id' => 'required',
+            'compra_id' => 'required'
         ];
 
         $this->validate($request, $rules);
 
-        $newProducto = Producto::create($request->all());
+        $newCompraDetalle = CompraDetalle::create($request->all());
 
-        return $this->showOne($newProducto, 201);
+        return $this->showOne($newCompraDetalle, 201);
     }
 
     /**
@@ -64,9 +69,9 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(CompraDetalle $compra_detalle)
     {
-        return $this->showOne($producto);
+        return $this->showOne($compra_detalle);
     }
 
     /**
@@ -87,21 +92,25 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, CompraDetalle $compra_detalle)
     {
-        $producto->fill($request->only([
-            'nombre',
-            'descripcion',
-            'categoria_id',
+        $compra_detalle->fill($request->only([
+            'codigo',
+            'cantidad',
+            'precio_compra',
+            'precio_sugerido',
+            'status',
+            'producto_id',
+            'compra_id'
         ]));
 
-        if ($producto->isClean()) {
+        if ($compra_detalle->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $producto->save();
+        $compra_detalle->save();
 
-        return $this->showOne($producto);
+        return $this->showOne($compra_detalle);
     }
 
     /**
@@ -110,10 +119,10 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(CompraDetalle $compra_detalle)
     {
-        $producto->delete();
+        $compra_detalle->delete();
 
-        return $this->showOne($producto);
+        return $this->showOne($compra_detalle);
     }
 }

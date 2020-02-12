@@ -85,11 +85,20 @@ Route::resource('tipos_transaccion', 'TipoTransaccion\TipoTransaccionController'
 Route::resource('transacciones_sucursales', 'TransaccionSucursal\TransaccionSucursalController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('transacciones_sucursales.all', 'TransaccionSucursal\TransaccionSucursalAllinController', ['only' => ['index']]);
 
-Route::resource('transacciones_productos', 'TransaccionProducto\TransaccionProductoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
-Route::resource('transacciones_productos.all', 'TransaccionProducto\TransaccionProductoAllinController', ['only' => ['index']]);
-
 Route::resource('entradas_productos', 'EntradaProducto\EntradaProductoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('entradas_productos.all', 'EntradaProducto\EntradaProductoAllinController', ['only' => ['index']]);
 
 Route::resource('salidas_productos', 'SalidaProducto\SalidaProductoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('salidas_productos.all', 'SalidaProducto\SalidaProductoAllinController', ['only' => ['index']]);
+
+Route::resource('cortes', 'Cortez\CortezController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('compras', 'Compras\ComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('compra_detalles', 'CompraDetalle\CompraDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('tipo_pagos', 'TiposPagos\TiposPagosController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('registro_compras', 'RegistroCompras\RegistroComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('salida_detalles', 'SalidaProductoDetalle\SalidaProductoDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);

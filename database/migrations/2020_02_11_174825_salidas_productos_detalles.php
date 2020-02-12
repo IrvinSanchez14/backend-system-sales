@@ -1,10 +1,11 @@
 <?php
 
+use App\SalidaProductoDetalles;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TransaccionesProductos extends Migration
+class SalidasProductosDetalles extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +14,18 @@ class TransaccionesProductos extends Migration
      */
     public function up()
     {
-        Schema::create('transacciones_productos', function (Blueprint $table) {
+        Schema::create('salidas_productos_detalles', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('producto_id')->unsigned();
-            $table->integer('tipo_id')->unsigned();
-            $table->decimal('valor_nuevo', 8, 2);
-            $table->decimal('valor_anterior', 8, 2);
-            $table->string('comentario');
-            $table->integer('usuario_id')->unsigned();
+            $table->decimal('precio_original', 8, 2);
+            $table->decimal('precio_grabado', 8, 2);
+            $table->integer('status')->default(SalidaProductoDetalles::AVAILABLE_DETALLES);
+            $table->integer('salida_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('tipo_id')->references('id')->on('tipos_transaccion');
             $table->foreign('producto_id')->references('id')->on('productos');
-            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->foreign('salida_id')->references('id')->on('salidas_productos');
         });
     }
 
@@ -37,6 +36,6 @@ class TransaccionesProductos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transacciones_productos');
+        Schema::dropIfExists('salidas_productos_detalles');
     }
 }

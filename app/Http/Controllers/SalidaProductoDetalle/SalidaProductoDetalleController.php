@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\TransaccionProducto;
+namespace App\Http\Controllers\SalidaProductoDetalle;
 
 use App\Http\Controllers\ApiController;
-use App\TransaccionProducto;
+use App\SalidaProductoDetalles;
 use Illuminate\Http\Request;
 
-class TransaccionProductoController extends ApiController
+class SalidaProductoDetalleController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,9 @@ class TransaccionProductoController extends ApiController
      */
     public function index()
     {
-        $transacciones_productos = TransaccionProducto::all();
+        $salida_detalles = SalidaProductoDetalles::all();
 
-        return $this->showAll($transacciones_productos);
+        return $this->showAll($salida_detalles);
     }
 
     /**
@@ -40,18 +40,16 @@ class TransaccionProductoController extends ApiController
     {
         $rules = [
             'producto_id' => 'required',
-            'tipo_id' => 'required',
-            'valor_nuevo' => 'required',
-            'valor_anterior' => 'required',
-            'comentario' => 'required',
-            'usuario_id' => 'required',
+            'precio_original' => 'required',
+            'precio_grabado' => 'required',
+            'salida_id' => 'required',
         ];
 
         $this->validate($request, $rules);
 
-        $newTransaccionProducto = TransaccionProducto::create($request->all());
+        $newSalidaDetalle = SalidaProductoDetalles::create($request->all());
 
-        return $this->showOne($newTransaccionProducto, 201);
+        return $this->showOne($newSalidaDetalle, 201);
     }
 
     /**
@@ -60,9 +58,9 @@ class TransaccionProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(TransaccionProducto $transacciones_producto)
+    public function show(SalidaProductoDetalles $salida_detalle)
     {
-        return $this->showOne($transacciones_producto);
+        return $this->showOne($salida_detalle);
     }
 
     /**
@@ -83,23 +81,23 @@ class TransaccionProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TransaccionProducto $transacciones_producto)
+    public function update(Request $request, SalidaProductoDetalles $salida_detalle)
     {
-        $transacciones_producto->fill($request->only([
+        $salida_detalle->fill($request->only([
             'producto_id',
-            'tipo_id',
-            'valor_nuevo',
-            'valor_anterior',
-            'comentario',
+            'precio_original',
+            'precio_grabado',
+            'status',
+            'salida_id',
         ]));
 
-        if ($transacciones_producto->isClean()) {
+        if ($salida_detalle->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $transacciones_producto->save();
+        $salida_detalle->save();
 
-        return $this->showOne($transacciones_producto);
+        return $this->showOne($salida_detalle);
     }
 
     /**
@@ -108,10 +106,10 @@ class TransaccionProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TransaccionProducto $transacciones_producto)
+    public function destroy(SalidaProductoDetalles $salida_detalle)
     {
-        $transacciones_producto->delete();
+        $salida_detalle->delete();
 
-        return $this->showOne($transacciones_producto);
+        return $this->showOne($salida_detalle);
     }
 }

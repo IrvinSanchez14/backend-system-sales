@@ -39,13 +39,12 @@ class SalidaProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'producto_id' => 'required',
-            'cantidad' => 'required',
             'valor_venta' => 'required',
             'valor_iva' => 'required',
             'no_factura' => 'required',
             'usuario_id' => 'required',
             'sucursal_id' => 'required',
+            'tipo_pago_id' => 'required'
         ];
 
         $this->validate($request, $rules);
@@ -87,15 +86,14 @@ class SalidaProductoController extends ApiController
     public function update(Request $request, SalidaProducto $salidas_producto)
     {
         $salidas_producto->fill($request->only([
-            'producto_id',
-            'cantidad',
-            'tipo_pago',
             'cliente_frecuente',
             'sin_iva',
             'valor_venta',
             'valor_iva',
             'no_factura',
+            'usuario_id',
             'sucursal_id',
+            'tipo_pago_id'
         ]));
 
         if ($salidas_producto->isClean()) {

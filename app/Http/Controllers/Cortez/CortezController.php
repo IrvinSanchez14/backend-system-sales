@@ -1,29 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Producto;
+namespace App\Http\Controllers\Cortez;
 
+use App\Cortez;
 use App\Http\Controllers\ApiController;
-use App\Producto;
 use Illuminate\Http\Request;
 
-class ProductoController extends ApiController
+class CortezController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api')
-            ->only(['index']);
-    }
-
     public function index()
     {
-        $productos = Producto::orderBy('updated_at', 'desc')->get();
+        $cortes = Cortez::all();
 
-        return $this->showAll($productos);
+        return $this->showAll($cortes);
     }
 
     /**
@@ -45,17 +39,21 @@ class ProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'categoria_id' => 'required',
+            'total_ventas' => 'required',
+            'total_compras' => 'required',
+            'total_eliminado' => 'required',
+            'total_efectivo' => 'required',
+            'total_pos' => 'required',
+            'total_descuento' => 'required',
+            'total_iva' => 'required',
             'usuario_id' => 'required',
         ];
 
         $this->validate($request, $rules);
 
-        $newProducto = Producto::create($request->all());
+        $newCorte = Cortez::create($request->all());
 
-        return $this->showOne($newProducto, 201);
+        return $this->showOne($newCorte, 201);
     }
 
     /**
@@ -64,9 +62,9 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(Cortez $corte)
     {
-        return $this->showOne($producto);
+        return $this->showOne($corte);
     }
 
     /**
@@ -87,21 +85,26 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, Cortez $corte)
     {
-        $producto->fill($request->only([
-            'nombre',
-            'descripcion',
-            'categoria_id',
+        $corte->fill($request->only([
+            'total_ventas',
+            'total_compras',
+            'total_eliminado',
+            'total_efectivo',
+            'total_pos',
+            'total_descuento',
+            'total_iva',
+            'status',
         ]));
 
-        if ($producto->isClean()) {
+        if ($corte->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $producto->save();
+        $corte->save();
 
-        return $this->showOne($producto);
+        return $this->showOne($corte);
     }
 
     /**
@@ -110,10 +113,10 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(Cortez $corte)
     {
-        $producto->delete();
+        $corte->delete();
 
-        return $this->showOne($producto);
+        return $this->showOne($corte);
     }
 }

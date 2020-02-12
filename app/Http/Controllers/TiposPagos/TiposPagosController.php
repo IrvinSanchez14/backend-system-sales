@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\TransaccionProducto;
+namespace App\Http\Controllers\TiposPagos;
 
 use App\Http\Controllers\ApiController;
-use App\TransaccionProducto;
+use App\TiposPagos;
 use Illuminate\Http\Request;
 
-class TransaccionProductoAllinController extends ApiController
+class TiposPagosController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        $AllInformation = TransaccionProducto::find($id)
-            ->load('productos', 'tipos');
+        $tipo_pagos = TiposPagos::all();
 
-        return $this->showOne($AllInformation);
+        return $this->showAll($tipo_pagos);
     }
 
     /**
@@ -39,7 +38,16 @@ class TransaccionProductoAllinController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'nombre' => 'required',
+            'siglas' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $newTipoPagos = TiposPagos::create($request->all());
+
+        return $this->showOne($newTipoPagos, 201);
     }
 
     /**
@@ -48,9 +56,9 @@ class TransaccionProductoAllinController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(TiposPagos $tipo_pago)
     {
-        //
+        return $this->showOne($tipo_pago);
     }
 
     /**
@@ -71,9 +79,21 @@ class TransaccionProductoAllinController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, TiposPagos $tipo_pago)
     {
-        //
+        $tipo_pago->fill($request->only([
+            'nombre',
+            'siglas',
+            'status',
+        ]));
+
+        if ($tipo_pago->isClean()) {
+            return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
+        }
+
+        $tipo_pago->save();
+
+        return $this->showOne($tipo_pago);
     }
 
     /**
@@ -82,8 +102,10 @@ class TransaccionProductoAllinController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(TiposPagos $tipo_pago)
     {
-        //
+        $tipo_pago->delete();
+
+        return $this->showOne($tipo_pago);
     }
 }

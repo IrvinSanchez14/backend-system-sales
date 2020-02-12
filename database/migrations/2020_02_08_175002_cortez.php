@@ -1,11 +1,11 @@
 <?php
 
-use App\Producto;
+use App\Cortez as AppCortez;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Productos extends Migration
+class Cortez extends Migration
 {
     /**
      * Run the migrations.
@@ -14,17 +14,20 @@ class Productos extends Migration
      */
     public function up()
     {
-        Schema::create('productos', function (Blueprint $table) {
+        Schema::create('cortez', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre');
-            $table->string('descripcion');
-            $table->string('status')->default(Producto::UNAVAILABLE_PRODUCT);
-            $table->integer('categoria_id')->unsigned();
+            $table->decimal('total_ventas', 8, 2);
+            $table->decimal('total_compras', 8, 2);
+            $table->decimal('total_eliminado', 8, 2);
+            $table->decimal('total_efectivo', 8, 2);
+            $table->decimal('total_pos', 8, 2);
+            $table->decimal('total_descuento', 8, 2);
+            $table->decimal('total_iva', 8, 2);
+            $table->string('status')->default(AppCortez::UNAVAILABLE_CORTEZ);
             $table->integer('usuario_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('categoria_id')->references('id')->on('categorias');
             $table->foreign('usuario_id')->references('id')->on('users');
         });
     }
@@ -36,6 +39,6 @@ class Productos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('productos');
+        Schema::dropIfExists('cortez');
     }
 }

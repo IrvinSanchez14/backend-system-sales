@@ -1,29 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Producto;
+namespace App\Http\Controllers\RegistroCompras;
 
 use App\Http\Controllers\ApiController;
-use App\Producto;
+use App\RegistroCompras;
 use Illuminate\Http\Request;
 
-class ProductoController extends ApiController
+class RegistroComprasController extends ApiController
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
-    {
-        $this->middleware('auth:api')
-            ->only(['index']);
-    }
-
     public function index()
     {
-        $productos = Producto::orderBy('updated_at', 'desc')->get();
+        $registro_compras = RegistroCompras::all();
 
-        return $this->showAll($productos);
+        return $this->showAll($registro_compras);
     }
 
     /**
@@ -45,17 +39,17 @@ class ProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required',
             'descripcion' => 'required',
-            'categoria_id' => 'required',
+            'compra_id' => 'required',
             'usuario_id' => 'required',
+            'sucursal_id' => 'required',
         ];
 
         $this->validate($request, $rules);
 
-        $newProducto = Producto::create($request->all());
+        $newRegistroCompras = RegistroCompras::create($request->all());
 
-        return $this->showOne($newProducto, 201);
+        return $this->showOne($newRegistroCompras, 201);
     }
 
     /**
@@ -64,9 +58,9 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(RegistroCompras $registro_compra)
     {
-        return $this->showOne($producto);
+        return $this->showOne($registro_compra);
     }
 
     /**
@@ -87,21 +81,23 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, RegistroCompras $registro_compra)
     {
-        $producto->fill($request->only([
-            'nombre',
+        $registro_compra->fill($request->only([
+            'status',
             'descripcion',
-            'categoria_id',
+            'compra_id',
+            'usuario_id',
+            'sucursal_id'
         ]));
 
-        if ($producto->isClean()) {
+        if ($registro_compra->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $producto->save();
+        $registro_compra->save();
 
-        return $this->showOne($producto);
+        return $this->showOne($registro_compra);
     }
 
     /**
@@ -110,10 +106,10 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(RegistroCompras $registro_compra)
     {
-        $producto->delete();
+        $registro_compra->delete();
 
-        return $this->showOne($producto);
+        return $this->showOne($registro_compra);
     }
 }
