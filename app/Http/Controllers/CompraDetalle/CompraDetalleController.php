@@ -47,7 +47,14 @@ class CompraDetalleController extends ApiController
      */
     public function store(Request $request)
     {
-        $rules = [
+        foreach ($request->all() as $item) {
+
+            CompraDetalle::create($item);
+        }
+
+        return $this->showMessage('data created', 201);
+
+        /*$rules = [
             'codigo' => 'required',
             'cantidad' => 'required',
             'precio_compra' => 'required',
@@ -55,12 +62,12 @@ class CompraDetalleController extends ApiController
             'producto_id' => 'required',
             'compra_id' => 'required'
         ];
-
         $this->validate($request, $rules);
+
 
         $newCompraDetalle = CompraDetalle::create($request->all());
 
-        return $this->showOne($newCompraDetalle, 201);
+        return $this->showOne($newCompraDetalle, 201);*/
     }
 
     /**

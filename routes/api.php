@@ -94,11 +94,13 @@ Route::resource('salidas_productos.all', 'SalidaProducto\SalidaProductoAllinCont
 Route::resource('cortes', 'Cortez\CortezController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 Route::resource('compras', 'Compras\ComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::post('compras.detalles', 'Compras\ComprasyDetallesController@index');
 
 Route::resource('compra_detalles', 'CompraDetalle\CompraDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 Route::resource('tipo_pagos', 'TiposPagos\TiposPagosController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 Route::resource('registro_compras', 'RegistroCompras\RegistroComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+Route::resource('registro_compras.compras', 'RegistroCompras\RegistroCompraSucursalController', ['only' => ['index']]);
 
 Route::resource('salida_detalles', 'SalidaProductoDetalle\SalidaProductoDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);

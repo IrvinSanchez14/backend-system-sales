@@ -29,8 +29,19 @@ class Sucursal extends Model
     {
         return $this->status == Sucursal::AVAILABLE_PRODUCT;
     }
+
     public function empresas()
     {
         return $this->belongsTo('App\Empresa', 'empresa_id', 'id');
+    }
+
+    public function compras()
+    {
+        return $this->hasMany('App\Compras', 'sucursal_id', 'id');
+    }
+
+    public function registro()
+    {
+        return $this->hasMany('App\RegistroCompras', 'sucursal_id', 'id');
     }
 }

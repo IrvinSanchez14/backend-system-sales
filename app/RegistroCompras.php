@@ -25,6 +25,11 @@ class RegistroCompras extends Model
 
     public function isAvailable()
     {
+
         return $this->status == RegistroCompras::AVAILABLE_COMPRAS_REGISTRO;
+    }
+    public function compras()
+    {
+        return $this->belongsTo('App\Compras', 'compra_id', 'id');
     }
 }

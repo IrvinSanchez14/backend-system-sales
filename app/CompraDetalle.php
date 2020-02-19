@@ -2,6 +2,7 @@
 
 namespace App;
 
+use app\Compras;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -29,5 +30,9 @@ class CompraDetalle extends Model
     public function isAvailable()
     {
         return $this->status == CompraDetalle::AVAILABLE_COMPRAS_DETALLE;
+    }
+    public function compras()
+    {
+        return $this->belongsTo('App\Compras', 'compra_id', 'id');
     }
 }
