@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
+use App\Categoria;
+use App\UsuarioSucursal;
 
 class User extends Authenticatable
 {
@@ -78,5 +80,17 @@ class User extends Authenticatable
     public static function generateVerificationCode()
     {
         return Str::random(40);
+    }
+    public function categorias()
+    {
+        return $this->hasMany(Categoria::class, 'usuario_id');
+    }
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'usuario_id');
+    }
+    public function usuarioSucursal()
+    {
+        return $this->hasMany(UsuarioSucursal::class, 'usuario_id');
     }
 }

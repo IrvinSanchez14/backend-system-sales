@@ -47,4 +47,9 @@ class Compras extends Model
     {
         return $this->hasOne('App\RegistroCompras', 'compra_id', 'id');
     }
+
+    public function sucursales()
+    {
+        return $this->belongsTo('App\Sucursal', 'sucursal_id', 'id');
+    }
 }

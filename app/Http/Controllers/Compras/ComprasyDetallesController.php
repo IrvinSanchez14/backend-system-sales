@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Compras;
 
 use App\Compras;
 use App\Http\Controllers\ApiController;
-use App\RegistroCompras;
 use App\Sucursal;
-use Illuminate\Http\Request;
 
 class ComprasyDetallesController extends ApiController
 {
-    public function index(Request $request, RegistroCompras $registro_compra)
+    public function index(Sucursal $sucursal)
     {
-        $registro_sucursales = Sucursal::find($request->sucursal_id)
-            ->load('registro')
-            ->load('registro.compras')
-            ->load('registro.compras.detalles');
+        $registro_sucursales = $sucursal
+            ->load([
+                'compras' => function ($query) {
+                    $query->where('status', '=', 'activo');
+                },
+                'compras.detalles'
+            ]);
 
 
         return $this->showOne($registro_sucursales);

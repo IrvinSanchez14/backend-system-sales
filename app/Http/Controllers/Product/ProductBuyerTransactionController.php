@@ -13,6 +13,7 @@ class ProductBuyerTransactionController extends ApiController
 {
     public function store(Request $request, Product $product, User $buyer)
     {
+        dd($product->id);
         $rules = [
             'quantity' => 'required|integer|min:1'
         ];

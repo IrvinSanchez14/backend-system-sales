@@ -32,4 +32,12 @@ class RegistroCompras extends Model
     {
         return $this->belongsTo('App\Compras', 'compra_id', 'id');
     }
+    public function inventario()
+    {
+        return $this->hasMany('App\EntradaInventario', 'registro_id', 'id');
+    }
+    public function sucursales()
+    {
+        return $this->belongsTo('App\Sucursal', 'sucursal_id', 'id');
+    }
 }

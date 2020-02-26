@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Producto;
+namespace App\Http\Controllers\UsuarioSucursal;
 
 use App\Http\Controllers\ApiController;
-use App\Product;
-use App\Producto;
+use App\UsuarioSucursal;
 use Illuminate\Http\Request;
 
-class ProductoController extends ApiController
+class UsuarioSucursalController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -22,9 +21,9 @@ class ProductoController extends ApiController
 
     public function index()
     {
-        $productos = Producto::orderBy('updated_at', 'desc')->get();
+        $usuarios_sucursales = UsuarioSucursal::orderBy('updated_at', 'desc')->get();
 
-        return $this->showAll($productos);
+        return $this->showAll($usuarios_sucursales);
     }
 
     /**
@@ -46,21 +45,18 @@ class ProductoController extends ApiController
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'status',
-            'categoria_id' => 'required',
             'usuario_id' => 'required',
+            'sucursal_id' => 'required',
         ];
 
         $this->validate($request, $rules);
 
-        $newProducto = Producto::create($request->all());
-        $register_new = Producto::find($newProducto->id);
+        $newUsuerSuc = UsuarioSucursal::create($request->all());
+        //$register_new = Producto::find($newProducto->id);
 
         //dd($register_new);
 
-        return $this->showOne($register_new, 201);
+        return $this->showOne($newUsuerSuc, 201);
     }
 
     /**
@@ -69,9 +65,9 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Producto $producto)
+    public function show(UsuarioSucursal $usuario_sucursal)
     {
-        return $this->showOne($producto);
+        return $this->showOne($usuario_sucursal);
     }
 
     /**
@@ -92,23 +88,20 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, UsuarioSucursal $usuario_sucursal)
     {
-        $producto->fill($request->only([
-            'nombre',
-            'descripcion',
-            'status',
-            'categoria_id',
+        $usuario_sucursal->fill($request->only([
             'usuario_id',
+            'sucursal_id',
         ]));
 
-        if ($producto->isClean()) {
+        if ($usuario_sucursal->isClean()) {
             return $this->errorResponse('Necesitas ingresar nuevos valores para poder actualizar el registro', 422);
         }
 
-        $producto->save();
+        $usuario_sucursal->save();
 
-        return $this->showOne($producto);
+        return $this->showOne($usuario_sucursal);
     }
 
     /**
@@ -117,10 +110,10 @@ class ProductoController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(UsuarioSucursal $usuario_sucursal)
     {
-        $producto->delete();
+        $usuario_sucursal->delete();
 
-        return $this->showOne($producto);
+        return $this->showOne($usuario_sucursal);
     }
 }

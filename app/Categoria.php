@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Producto;
+use App\User;
 
 class Categoria extends Model
 {
@@ -12,8 +13,8 @@ class Categoria extends Model
 
     public $table = "categorias";
 
-    const AVAILABLE_PRODUCT = 'available';
-    const UNAVAILABLE_PRODUCT = 'unavailable';
+    const AVAILABLE_PRODUCT = 'disponible';
+    const UNAVAILABLE_PRODUCT = 'no disponible';
 
     protected $dates = ['deleted_at'];
 
@@ -32,5 +33,13 @@ class Categoria extends Model
     public function productos()
     {
         return $this->hasOne('App\Producto', 'categoria_id', 'categoria_id');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+    public function products()
+    {
+        return $this->hasMany(Producto::class, 'categoria_id');
     }
 }

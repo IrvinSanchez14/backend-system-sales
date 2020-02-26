@@ -1,11 +1,18 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Categoria;
 use App\User;
 use App\Category;
+use App\CompraDetalle;
+use App\Compras;
+use App\Empresa;
 use App\Product;
+use App\Producto;
 use App\Transaction;
 use App\Seller;
+use App\Sucursal;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -32,6 +39,69 @@ $factory->define(User::class, function (Faker $faker) {
         'admin' => $verified = $faker->randomElement([User::ADMIN_USER, User::REGULAR_USER]),
     ];
 });
+
+$factory->define(Empresa::class, function (Faker $faker) {
+    return [
+        'nombre' => $faker->word,
+        'razon_social' => $faker->word,
+        'telefono' => $faker->phoneNumber,
+        'status' => $faker->randomElement([Empresa::AVAILABLE_PRODUCT, Empresa::UNAVAILABLE_PRODUCT]),
+        'usuario_id' => User::all()->random()->id,
+    ];
+});
+
+$factory->define(Sucursal::class, function (Faker $faker) {
+    return [
+        'nombre' => $faker->word,
+        'telefono' => $faker->phoneNumber,
+        'direccion' => $faker->paragraph(1),
+        'status' => $faker->randomElement([Sucursal::AVAILABLE_PRODUCT, Empresa::UNAVAILABLE_PRODUCT]),
+        'empresa_id' => Empresa::all()->random()->id,
+        'usuario_id' => User::all()->random()->id,
+    ];
+});
+
+$factory->define(Categoria::class, function (Faker $faker) {
+    return [
+        'nombre' => $faker->word,
+        'descripcion' => $faker->paragraph(1),
+        'status' => $faker->randomElement([Categoria::AVAILABLE_PRODUCT, Categoria::UNAVAILABLE_PRODUCT]),
+        'usuario_id' => User::all()->random()->id,
+    ];
+});
+
+$factory->define(Producto::class, function (Faker $faker) {
+    return [
+        'nombre' => $faker->word,
+        'descripcion' => $faker->paragraph(1),
+        'status' => $faker->randomElement([Producto::AVAILABLE_PRODUCT, Categoria::UNAVAILABLE_PRODUCT]),
+        'categoria_id' => Categoria::all()->random()->id,
+        'usuario_id' => User::all()->random()->id,
+    ];
+});
+
+$factory->define(Compras::class, function (Faker $faker) {
+    return [
+        'lote' => $faker->randomNumber,
+        'tipo_compra' => $faker->randomElement([Compras::TIPO_NUEVO, Compras::TIPO_USADO]),
+        'status' => $faker->randomElement([Compras::AVAILABLE_COMPRAS, Compras::UNAVAILABLE_COMPRAS]),
+        'sucursal_id' => Sucursal::all()->random()->id,
+        'usuario_id' => User::all()->random()->id,
+    ];
+});
+
+
+$factory->define(CompraDetalle::class, function (Faker $faker) {
+    return [
+        'codigo' => $faker->randomNumber,
+        'cantidad' => $faker->numberBetween($min = 1, $max = 50),
+        'precio_compra' => $faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = 100),
+        'precio_sugerido' => $faker->randomFloat($nbMaxDecimals = NULL, $min = 0, $max = 100),
+        'status' => $faker->randomElement([CompraDetalle::AVAILABLE_COMPRAS_DETALLE, CompraDetalle::UNAVAILABLE_COMPRAS_DETALLE]),
+        'producto_id' => Producto::all()->random()->id,
+    ];
+});
+
 
 $factory->define(Category::class, function (Faker $faker) {
     return [
@@ -61,5 +131,3 @@ $factory->define(Transaction::class, function (Faker $faker) {
         'product_id' => $seller->products->random()->id,
     ];
 });
-
-

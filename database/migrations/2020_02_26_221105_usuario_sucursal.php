@@ -1,11 +1,10 @@
 <?php
 
-use App\Producto;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Productos extends Migration
+class UsuarioSucursal extends Migration
 {
     /**
      * Run the migrations.
@@ -14,17 +13,13 @@ class Productos extends Migration
      */
     public function up()
     {
-        Schema::create('productos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('nombre');
-            $table->string('descripcion');
-            $table->string('status')->default(Producto::AVAILABLE_PRODUCT);
-            $table->integer('categoria_id')->unsigned();
+        Schema::create('usuario_categoria', function (Blueprint $table) {
             $table->integer('usuario_id')->unsigned();
+            $table->integer('sucursal_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('categoria_id')->references('id')->on('categorias');
+            $table->foreign('sucursal_id')->references('id')->on('sucursales');
             $table->foreign('usuario_id')->references('id')->on('users');
         });
     }
@@ -36,6 +31,6 @@ class Productos extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('productos');
+        Schema::dropIfExists('usuario_categoria');
     }
 }

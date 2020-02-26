@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\User;
 
 class Producto extends Model
 {
@@ -11,8 +12,8 @@ class Producto extends Model
 
     public $table = "productos";
 
-    const AVAILABLE_PRODUCT = 'available';
-    const UNAVAILABLE_PRODUCT = 'unavailable';
+    const AVAILABLE_PRODUCT = 'disponible';
+    const UNAVAILABLE_PRODUCT = 'no disponible';
 
     const OFERTA_DISPONIBLE = true;
     const OFERTA_FAIL = false;
@@ -22,10 +23,7 @@ class Producto extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'precio_compra',
-        'precio_sugerido',
         'status',
-        'oferta_flag',
         'categoria_id',
         'usuario_id',
     ];
@@ -43,5 +41,9 @@ class Producto extends Model
     public function categorias()
     {
         return $this->belongsTo('App\Categoria', 'categoria_id', 'id');
+    }
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

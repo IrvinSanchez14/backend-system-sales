@@ -94,6 +94,7 @@ class ComprasController extends ApiController
     {
         $compra->fill($request->only([
             'lote',
+            'status',
             'tipo_compra',
             'sucursal_id',
             'usuario_id',

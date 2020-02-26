@@ -34,6 +34,7 @@ Route::post('login', 'User\UserController@login');
 
 
 Route::resource('users', 'User\UserController', ['except' => ['create', 'edit']]);
+Route::resource('users.sucursal', 'User\UsuarioSucursalController', ['only' => ['index']]);
 Route::name('verify')->get('users/verify/{token}', 'User\UserController@verify');
 Route::name('resend')->get('users/{user}/resend', 'User\UserController@resend');
 
@@ -90,11 +91,12 @@ Route::resource('entradas_productos.all', 'EntradaProducto\EntradaProductoAllinC
 
 Route::resource('salidas_productos', 'SalidaProducto\SalidaProductoController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('salidas_productos.all', 'SalidaProducto\SalidaProductoAllinController', ['only' => ['index']]);
+Route::resource('salidas_productos.transaccion_ventas', 'SalidaProducto\SalidaProductoInventarioTransaccionController', ['only' => ['store']]);
 
 Route::resource('cortes', 'Cortez\CortezController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
 Route::resource('compras', 'Compras\ComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
-Route::post('compras.detalles', 'Compras\ComprasyDetallesController@index');
+Route::resource('sucursal.compras', 'Compras\ComprasyDetallesController', ['only' => ['index']]);
 
 Route::resource('compra_detalles', 'CompraDetalle\CompraDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 
@@ -102,5 +104,11 @@ Route::resource('tipo_pagos', 'TiposPagos\TiposPagosController', ['only' => ['in
 
 Route::resource('registro_compras', 'RegistroCompras\RegistroComprasController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
 Route::resource('registro_compras.compras', 'RegistroCompras\RegistroCompraSucursalController', ['only' => ['index']]);
+Route::resource('sucursales.inventario_sucursal', 'RegistroCompras\SucursalRegistroCompraInventarioController', ['only' => ['index']]);
 
 Route::resource('salida_detalles', 'SalidaProductoDetalle\SalidaProductoDetalleController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
+
+Route::resource('entrada_inventario', 'EntradaInventario\EntradaInventarioController', ['only' => ['store']]);
+
+
+Route::resource('usuario_sucursal', 'UsuarioSucursal\UsuarioSucursalController', ['only' => ['index', 'store', 'show', 'update', 'destroy']]);
